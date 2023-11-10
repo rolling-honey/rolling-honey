@@ -11,14 +11,55 @@
 import React, { useState, useEffect } from "react";
 import { useSpring, animated } from "@react-spring/web";
 import styled from "styled-components";
-import backgroundImg from "../../assets/images/MainBackground7.gif";
-import backgroundImg2 from "../../assets/images/메인페이지_설명3.jpg";
+import backgroundImg from "../../assets/images/애니메이션배경.gif";
+import backgroundImg2 from "../../assets/images/메인페이지_설명4.jpg";
 // import backgroundImg3 from "../../assets/images/MainVertical.jpg";
 import secondPageImg from "../../assets/images/MainVertical.jpg";
-import thirdPageImg from "../../assets/images/예시.jpg";
+import thirdPageImg from "../../assets/images/메인페이지_두번째.jpg";
+import thirdPageGif from "../../assets/images/MainBackground7.gif";
 import FooterLogoImg from "../../assets/images/FooterLogo2.png";
 import MainHeader2 from "@components/common/header/MainHeader2";
 import { Link, Element } from "react-scroll"; // This is the react-scroll library
+
+// Define a styled button component with the gradient design
+const StyledButton = styled.button`
+  background-image: linear-gradient(to right, #4776e6 0%, #8e54e9 51%, #4776e6);
+  margin: 10px;
+  padding: 15px 30px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px black;
+  border-radius: 10px;
+  display: block;
+  /* font-weight: bold; */
+
+  &:hover {
+    /* background-position: right center; */
+    background-color: white;
+    color: black;
+    text-decoration: none;
+  }
+
+  &:focus {
+    background-color: white;
+    opacity: 0;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  /* align-items: flex-end; // Aligns the buttons to the right */
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  right: 0; // Align to the right side
+  transform: translateY(-59%);
+  padding: 0 100px; // Add padding if needed
+`;
 
 const Section = styled(Element)`
   width: 100%;
@@ -36,18 +77,16 @@ const Footer = styled(animated.footer)`
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 50px;
   text-align: center;
-  padding: 90px;
+  padding: 50px;
   background-color: #252531;
   color: white; /* text color */
   font-size: 16px;
-  /* font-weight: bold; */
 `;
 
 const Container = styled.div`
   width: 100%;
-  height: 500vh; /* Making the container tall to enable scrolling */
+  height: 320vh; /* Making the container tall to enable scrolling */
   position: relative;
   background-color: #252531;
   background-size: cover;
@@ -64,14 +103,14 @@ const DynamicBackground = styled(animated.div)`
   top: 0;
   left: 0;
   background-image: url(${backgroundImg2}),
-    radial-gradient(circle at center, transparent 0%, #252531 90%),
+    radial-gradient(circle at center, transparent 0%, #252531 80%),
     url(${backgroundImg});
   background-position:
     left,
     right center,
     right;
   background-repeat: no-repeat, no-repeat, no-repeat;
-  background-size: 55%, 45%, 50%; /* Set this to the correct size of your images */
+  background-size: 45%, 55%, 55%; /* Set this to the correct size of your images */
   z-index: -1;
 
   /* Add a pseudo-element to create the blur effect on the left edge of the right image */
@@ -79,7 +118,7 @@ const DynamicBackground = styled(animated.div)`
     content: "";
     position: absolute;
     top: 0;
-    left: 55%; /* Adjust this value so it overlays the left edge of the right image */
+    left: 45%; /* Adjust this value so it overlays the left edge of the right image */
     height: 100%;
     width: 300px; /* Width of the blur effect */
     background: linear-gradient(to left, rgba(0, 0, 0, 0), #252531);
@@ -91,7 +130,7 @@ const SecondPage = styled.div`
   width: 100%;
   height: 100%; /* Making the container tall to enable scrolling */
   position: relative;
-  /* background-image: url(${secondPageImg}); */
+  background-image: url(${thirdPageImg});
   background-color: #252531;
   background-size: cover;
   background-position: center;
@@ -100,18 +139,52 @@ const SecondPage = styled.div`
   z-index: -10;
 `;
 
-const ThirdPage = styled.div`
-  width: 100%;
-  height: 100%; /* Making the container tall to enable scrolling */
+const ThirdPage = styled(animated.div)`
   position: relative;
-  /* background-image: url(${thirdPageImg}); */
-  background-color: #252531;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 1;
-  z-index: -10;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-image: url(${backgroundImg2}),
+    radial-gradient(circle at center, transparent 0%, #252531 50%),
+    url(${thirdPageGif}), url(${backgroundImg2});
+
+  /* radial-gradient(circle at center, transparent 0%, #252531 80%),
+    radial-gradient(circle at center, transparent 0%, #252531 80%); */
+  background-position:
+    left,
+    center,
+    center center,
+    right;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-size: 33%, 34%, 33%, 33%; /* Set this to the correct size of your images */
+  z-index: -1;
+
+  /* Add a pseudo-element to create the blur effect on the left edge of the right image */
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 45%; /* Adjust this value so it overlays the left edge of the right image */
+    height: 100%;
+    width: 300px; /* Width of the blur effect */
+    /* background: linear-gradient(to left, rgba(0, 0, 0, 0), #252531); */
+    z-index: -1;
+  }
 `;
+
+// const ThirdPage = styled.div`
+//   width: 100%;
+//   height: 100%; /* Making the container tall to enable scrolling */
+//   position: relative;
+//   background-image: url(${thirdPageImg});
+//   background-color: #252531;
+//   background-size: cover;
+//   background-position: center;
+//   background-repeat: no-repeat;
+//   opacity: 1;
+//   z-index: -10;
+// `;
 
 const ScrollDownIndicator = styled(animated.div)`
   position: fixed;
@@ -166,7 +239,7 @@ function MainPage() {
   // Spring animation for the footer
   const footerAnimation = useSpring({
     opacity: showFooter ? 1 : 0,
-    bottom: showFooter ? "0px" : "-100px", // This will smoothly slide the footer up and down
+    bottom: showFooter ? "0px" : "-600px", // This will smoothly slide the footer up and down
   });
 
   // Update scrollY when the user scrolls
@@ -202,7 +275,7 @@ function MainPage() {
     (y) => `scale(${1 + y / (2 * vhInPixels)})`, // Image scale grows as you scroll down
   );
 
-  const imageOpacity = scrollY.to((y) => `${1 - y / (2 * vhInPixels)}`);
+  const imageOpacity = scrollY.to((y) => `${1 - y / (0.5 * vhInPixels)}`);
 
   // Make sure to only render once we have the window height
   if (!vhInPixels) {
@@ -243,7 +316,9 @@ function MainPage() {
       {/* Your other content here */}
       <ScrollDownIndicator style={scrollDownAnimation}>🢓</ScrollDownIndicator>
       <Footer style={footerAnimation}>
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div
+          style={{ display: "flex", alignItems: "center", paddingLeft: "30px" }}
+        >
           {/* Aligning Contact and Guide side by side */}
 
           <p style={{ margin: "0px 20px" }}>연락처</p>
@@ -258,7 +333,7 @@ function MainPage() {
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-end",
-            paddingRight: "160px",
+            paddingRight: "170px",
           }}
         >
           <img src={FooterLogoImg} width="120" alt="FooterLogo" />
