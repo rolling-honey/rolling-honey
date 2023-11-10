@@ -10,18 +10,17 @@
 
 import React, { useState, useEffect } from "react";
 import { useSpring, animated } from "@react-spring/web";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import backgroundImg from "../../assets/images/애니메이션배경.gif";
 import backgroundImg2 from "../../assets/images/메인페이지_설명4.jpg";
 // import backgroundImg3 from "../../assets/images/MainVertical.jpg";
 import secondPageImg from "../../assets/images/MainVertical.jpg";
-import thirdPageImg from "../../assets/images/메인페이지_두번째.jpg";
+import thirdPageImg from "../../assets/images/메인페이지_두번째2.jpg";
 import thirdPageGif from "../../assets/images/MainBackground7.gif";
 import FooterLogoImg from "../../assets/images/FooterLogo2.png";
 import MainHeader2 from "@components/common/header/MainHeader2";
 import { Link, Element } from "react-scroll"; // This is the react-scroll library
 
-// Define a styled button component with the gradient design
 const StyledButton = styled.button`
   background-image: linear-gradient(to right, #4776e6 0%, #8e54e9 51%, #4776e6);
   margin: 10px;
@@ -34,31 +33,28 @@ const StyledButton = styled.button`
   box-shadow: 0 0 20px black;
   border-radius: 10px;
   display: block;
-  /* font-weight: bold; */
+  position: absolute;
+  top: 57%;
+  left: 8%;
+  cursor: pointer;
 
   &:hover {
-    /* background-position: right center; */
     background-color: white;
-    color: black;
+    color: white; /* Changed the text color to black for visibility */
     text-decoration: none;
+    transform: scale(1.1); /* Makes the button bigger */
+    transition: transform 0.3s ease; /* Smooth transition for scaling */
+  }
+
+  &:active {
+    transform: scale(0.96); /* Scales down the button when clicked */
+    transition: transform 0.1s; /* Faster transition for click effect */
   }
 
   &:focus {
     background-color: white;
-    opacity: 0;
+    /* Ensuring the button remains clickable and visible */
   }
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  /* align-items: flex-end; // Aligns the buttons to the right */
-  justify-content: center;
-  position: absolute;
-  top: 50%;
-  right: 0; // Align to the right side
-  transform: translateY(-59%);
-  padding: 0 100px; // Add padding if needed
 `;
 
 const Section = styled(Element)`
@@ -82,6 +78,7 @@ const Footer = styled(animated.footer)`
   background-color: #252531;
   color: white; /* text color */
   font-size: 16px;
+  /* border-top: 1px solid black; */
 `;
 
 const Container = styled.div`
@@ -92,8 +89,12 @@ const Container = styled.div`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 1;
-  z-index: -10;
+  overflow-y: scroll; /* Allow vertical scrolling */
+  ${css`
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  `}
 `;
 
 const DynamicBackground = styled(animated.div)`
@@ -111,7 +112,7 @@ const DynamicBackground = styled(animated.div)`
     right;
   background-repeat: no-repeat, no-repeat, no-repeat;
   background-size: 45%, 55%, 55%; /* Set this to the correct size of your images */
-  z-index: -1;
+  z-index: 3;
 
   /* Add a pseudo-element to create the blur effect on the left edge of the right image */
   &:before {
@@ -122,11 +123,11 @@ const DynamicBackground = styled(animated.div)`
     height: 100%;
     width: 300px; /* Width of the blur effect */
     background: linear-gradient(to left, rgba(0, 0, 0, 0), #252531);
-    z-index: -1;
+    /* z-index: -2; */
   }
 `;
 
-const SecondPage = styled.div`
+const SecondPage = styled(animated.div)`
   width: 100%;
   height: 100%; /* Making the container tall to enable scrolling */
   position: relative;
@@ -136,7 +137,8 @@ const SecondPage = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   opacity: 1;
-  z-index: -10;
+  /* border-top: 1px solid black; */
+  z-index: 2;
 `;
 
 const ThirdPage = styled(animated.div)`
@@ -158,7 +160,7 @@ const ThirdPage = styled(animated.div)`
     right;
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
   background-size: 33%, 34%, 33%, 33%; /* Set this to the correct size of your images */
-  z-index: -1;
+  z-index: 1;
 
   /* Add a pseudo-element to create the blur effect on the left edge of the right image */
   &:before {
@@ -169,7 +171,7 @@ const ThirdPage = styled(animated.div)`
     height: 100%;
     width: 300px; /* Width of the blur effect */
     /* background: linear-gradient(to left, rgba(0, 0, 0, 0), #252531); */
-    z-index: -1;
+    /* z-index: -1; */
   }
 `;
 
@@ -192,8 +194,7 @@ const ScrollDownIndicator = styled(animated.div)`
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-  cursor: pointer;
-  color: white;
+  color: #5383fa;
   text-align: center;
   font-size: 70px;
 `;
@@ -233,13 +234,22 @@ function MainPage() {
     config: { tension: 250, friction: 10 },
   });
 
+  const secondPageAnimation = useSpring({
+    opacity: scrollY.to([0, vhInPixels * 0.5, vhInPixels], [0, 0, 1]),
+    transform: scrollY.to(
+      [0, vhInPixels * 0.5, vhInPixels],
+      ["scale(1.0)", "scale(1.1)", "scale(1.0)"],
+    ),
+    config: { tension: 250, friction: 10 },
+  });
+
   // State to manage the footer visibility
   const [showFooter, setShowFooter] = useState(false);
 
   // Spring animation for the footer
   const footerAnimation = useSpring({
     opacity: showFooter ? 1 : 0,
-    bottom: showFooter ? "0px" : "-600px", // This will smoothly slide the footer up and down
+    bottom: showFooter ? "0px" : "-700px", // This will smoothly slide the footer up and down
   });
 
   // Update scrollY when the user scrolls
@@ -300,9 +310,11 @@ function MainPage() {
             transform: imageTransform, // Apply the dynamic scale transformation
             opacity: imageOpacity, // Apply the dynamic opacity
           }}
-        />,
+        >
+          <StyledButton>서비스 이용하기</StyledButton>
+        </DynamicBackground>,
       )}
-      {renderSection(2, <SecondPage />)}
+      {renderSection(2, <SecondPage style={secondPageAnimation} />)}
       {renderSection(3, <ThirdPage />)}
       {/* Repeat for as many sections as you need, putting your content inside */}
       {/* Your ScrollDownIndicator and Footer will likely stay outside of these sections */}
