@@ -43,9 +43,9 @@ import com.thirty.ggulswriting.room.dto.request.RoomParticipateReqDto;
 import com.thirty.ggulswriting.room.entity.Room;
 import com.thirty.ggulswriting.room.repository.RoomRepository;
 
-@Transactional
-@RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 @Service
 public class RoomServiceImpl implements RoomService {
 	@Value("${room.salt}")
@@ -56,6 +56,7 @@ public class RoomServiceImpl implements RoomService {
 	private final RoomRepository roomRepository;
 	private final ParticipationRepository participationRepository;
 
+	@Transactional
 	@Override
 	public String participate(RoomParticipateReqDto roomParticipateReqDto, int memberId) {
 		Optional<Member> optionalMember = memberRepository.findMemberByMemberIdAndGoodbyeTimeIsNull(memberId);
@@ -106,6 +107,7 @@ public class RoomServiceImpl implements RoomService {
 		return "ok";
 	}
 
+	@Transactional
 	@Override
 	public void out(int roomId, int memberId) {
 		Optional<Member> optionalMember = memberRepository.findMemberByMemberIdAndGoodbyeTimeIsNull(memberId);
@@ -237,6 +239,7 @@ public class RoomServiceImpl implements RoomService {
 		return RoomDetailResDto.of(room.getMember().getName(), room.getRoomTitle(), isOpen, room.getShowTime());
 	}
 
+	@Transactional
 	@Override
 	public void modify(int roomId, int memberId, RoomModifyReqDto roomModifyReqDto) {
 		//방이 살아있는지 검증
@@ -270,6 +273,7 @@ public class RoomServiceImpl implements RoomService {
 		);
 	}
 
+	@Transactional
 	@Override
 	public void deleteRoom(RoomDeleteReqDto roomDeleteReqDto, int memberId) {
 		// 탈퇴한 회원인지 검증
@@ -296,6 +300,7 @@ public class RoomServiceImpl implements RoomService {
 		room.delete();
 	}
 
+	@Transactional
 	@Override
 	public RoomCreateResDto createRoom(RoomCreateReqDto roomCreateReqDto, int memberId) {
 		// 탈퇴한 회원인지 검증

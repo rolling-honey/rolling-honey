@@ -26,7 +26,7 @@ import com.thirty.ggulswriting.room.repository.RoomRepository;
 
 import lombok.AllArgsConstructor;
 
-@Transactional
+@Transactional(readOnly = true)
 @AllArgsConstructor
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -36,6 +36,7 @@ public class MessageServiceImpl implements MessageService {
 	private final MessageRepository messageRepository;
 	private final ParticipationRepository participationRepository;
 
+	@Transactional
 	@Override
 	public String send(MessageSendReqDto messageSendReqDto, int memberId) {
 		Optional<Member> optionalMemberFrom = memberRepository.findMemberByMemberIdAndGoodbyeTimeIsNull(memberId);
