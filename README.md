@@ -1,6 +1,8 @@
 # A701 Thirty(꿀스라이팅)
 
+## Priview
 
+![메인화면](./exec/images/ggul-main.png)
 
 >개봉일을 정하고, 서로에게 편지를 쓰는 **익명롤링페이퍼** 사이트
 
